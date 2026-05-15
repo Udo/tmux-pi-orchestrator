@@ -1,4 +1,5 @@
 (() => {
+	function bootTmuxOrchestrator() {
 	const app = document.querySelector('#tmux-app');
 	if (!app) return;
 
@@ -155,4 +156,11 @@
 
 	refresh();
 	timer = setInterval(refresh, 2500);
+	}
+
+	if (document.readyState === 'loading') {
+		document.addEventListener('DOMContentLoaded', bootTmuxOrchestrator, { once: true });
+	} else {
+		bootTmuxOrchestrator();
+	}
 })();

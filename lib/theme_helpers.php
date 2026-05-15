@@ -49,8 +49,8 @@ function theme_render_global_controls($embed_mode, $options = array())
 {
 	if($embed_mode)
 		return;
-	$show_theme_switcher = array_key_exists('theme_switcher', $options) ? (bool)$options['theme_switcher'] : true;
-	$show_cookie_consent = array_key_exists('cookie_consent', $options) ? (bool)$options['cookie_consent'] : true;
+	$show_theme_switcher = array_key_exists('theme_switcher', $options) ? (bool)$options['theme_switcher'] : false;
+	$show_cookie_consent = array_key_exists('cookie_consent', $options) ? (bool)$options['cookie_consent'] : false;
 	if($show_theme_switcher)
 		echo component('components/example/theme-switcher');
 	if($show_cookie_consent)
