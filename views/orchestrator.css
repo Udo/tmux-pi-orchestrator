@@ -86,7 +86,7 @@
 .send-form {
 	margin-top: 0.75rem;
 	display: grid;
-	grid-template-columns: minmax(0, 1fr) auto;
+	grid-template-columns: 1fr;
 	gap: 0.65rem;
 	align-items: stretch;
 	width: 100%;
@@ -111,7 +111,7 @@
 	justify-content: flex-end;
 	align-content: stretch;
 	flex-wrap: wrap;
-	min-width: max-content;
+	width: 100%;
 }
 .button {
 	border: 1px solid rgba(148, 163, 184, 0.3);

@@ -117,7 +117,7 @@ class TmuxOrchestrator
 		if(!self::validTarget($target))
 			throw new InvalidArgumentException('Invalid pane target.');
 		$lines = max(20, min(1000, $lines));
-		$result = self::run(['capture-pane', '-p', '-t', $target, '-S', '-'.$lines]);
+		$result = self::run(['capture-pane', '-p', '-e', '-t', $target, '-S', '-'.$lines]);
 		if(!$result['ok'])
 			throw new RuntimeException(trim($result['stderr']) ?: 'Unable to capture tmux pane.');
 		return ['target' => $target, 'lines' => $lines, 'content' => rtrim($result['stdout'], "\n")];

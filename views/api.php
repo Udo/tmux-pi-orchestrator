@@ -23,9 +23,15 @@
 		{
 			case 'snapshot':
 				$sessions = TmuxOrchestrator::listSessions();
+				$session_names = array_column($sessions, 'name');
 				$selected = (string)($_REQUEST['session'] ?? ($sessions[0]['name'] ?? ''));
+				if($selected === '' || !in_array($selected, $session_names, true))
+					$selected = (string)($sessions[0]['name'] ?? '');
 				$panes = $selected !== '' ? TmuxOrchestrator::listPanes($selected) : [];
-				$target = (string)($_REQUEST['target'] ?? ($panes[0]['target'] ?? ''));
+				$pane_targets = array_column($panes, 'target');
+				$target = (string)($_REQUEST['target'] ?? '');
+				if($target === '' || !in_array($target, $pane_targets, true))
+					$target = (string)($panes[0]['target'] ?? '');
 				$capture = $target !== '' ? TmuxOrchestrator::capture($target, (int)($_REQUEST['lines'] ?? 180)) : ['content' => ''];
 				api_response(['ok' => true, 'sessions' => $sessions, 'selected_session' => $selected, 'panes' => $panes, 'selected_target' => $target, 'capture' => $capture, 'csrf' => $_SESSION['csrf_token'] ?? '']);
 
