@@ -77,8 +77,20 @@
 	font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 	white-space: pre-wrap;
 	word-break: break-word;
+	tab-size: 4;
+	text-shadow: 0 0 10px rgba(34, 197, 94, 0.08);
 }
-.send-form { margin-top: 0.75rem; display: grid; gap: 0.65rem; }
+.terminal-output span {
+	border-radius: 0.12rem;
+}
+.send-form {
+	margin-top: 0.75rem;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	gap: 0.65rem;
+	align-items: stretch;
+	width: 100%;
+}
 .send-form textarea,
 .create-dialog input,
 .terminal-toolbar select {
@@ -88,8 +100,19 @@
 	border-radius: 12px;
 	padding: 0.7rem;
 }
-.send-form textarea { resize: vertical; width: 100%; box-sizing: border-box; }
-.send-actions { justify-content: flex-end; flex-wrap: wrap; }
+.send-form textarea {
+	resize: vertical;
+	width: 100%;
+	min-width: 0;
+	box-sizing: border-box;
+	min-height: 5.25rem;
+}
+.send-actions {
+	justify-content: flex-end;
+	align-content: stretch;
+	flex-wrap: wrap;
+	min-width: max-content;
+}
 .button {
 	border: 1px solid rgba(148, 163, 184, 0.3);
 	border-radius: 999px;
@@ -115,5 +138,8 @@
 	.terminal-panel { order: 2; min-height: 65vh; }
 	.session-list { grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); }
 	.terminal-output { max-height: 55vh; font-size: 12px; }
+	.send-form { grid-template-columns: 1fr; }
+	.send-actions { min-width: 0; width: 100%; justify-content: space-between; }
+	.send-actions .button { flex: 1; }
 	.tmux-actions { width: 100%; justify-content: space-between; }
 }
