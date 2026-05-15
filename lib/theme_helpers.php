@@ -130,7 +130,7 @@ function theme_render_standard_nav($options = array())
 				<a href="<?= theme_menu_href($menu_key, $menu_item) ?>"><?= safe($menu_item['title']) ?></a>
 			<?php } ?>
 		</div>
-		<?php theme_render_account_links(array(
+		<?php if(!empty($options['account_links'])) theme_render_account_links(array(
 			'wrapper_class' => $account_wrapper_class,
 			'name_class' => 'account-name',
 			'show_avatar' => $show_avatar,

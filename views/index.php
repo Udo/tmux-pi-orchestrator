@@ -6,19 +6,13 @@
 ?>
 
 <section class="tmux-app" id="tmux-app" data-api-url="<?= asafe($api_url) ?>" data-csrf="<?= asafe($_SESSION['csrf_token'] ?? '') ?>">
-	<header class="tmux-hero">
-		<div>
-			<p class="eyebrow">same-host tmux control</p>
-			<h1>Remote CLI sessions from your mobile browser</h1>
-			<p>Inspect bash, pi, Claude, Codex, and other long-running terminal agents, then send the next prompt without opening SSH on the phone.</p>
-		</div>
+	<div class="tmux-status">
+		<span data-status>Loading tmux sessions…</span>
 		<div class="tmux-actions">
 			<button type="button" class="button" data-refresh>Refresh</button>
 			<label class="auto-refresh"><input type="checkbox" data-auto-refresh checked> Auto</label>
 		</div>
-	</header>
-
-	<div class="tmux-status" data-status>Loading tmux sessions…</div>
+	</div>
 
 	<div class="tmux-layout">
 		<aside class="tmux-panel sessions-panel">
