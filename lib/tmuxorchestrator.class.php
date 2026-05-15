@@ -2,7 +2,7 @@
 
 class TmuxOrchestrator
 {
-	public static function run(array $args, int $timeoutSeconds = 8): array
+	public static function run(array $args, int $timeoutSeconds = 8, ?string $stdin = null): array
 	{
 		$cmd = array_merge(['tmux'], $args);
 		$descriptorSpec = [
@@ -17,6 +17,8 @@ class TmuxOrchestrator
 			return ['ok' => false, 'exit' => 127, 'stdout' => '', 'stderr' => 'Unable to execute tmux.'];
 		}
 
+		if($stdin !== null)
+			fwrite($pipes[0], $stdin);
 		fclose($pipes[0]);
 		stream_set_blocking($pipes[1], false);
 		stream_set_blocking($pipes[2], false);
@@ -129,12 +131,19 @@ class TmuxOrchestrator
 			throw new InvalidArgumentException('Invalid pane target.');
 		if(strlen($text) > 8000)
 			throw new InvalidArgumentException('Input is too large.');
-		$result = self::run(['send-keys', '-t', $target, '-l', '--', $text]);
-		if(!$result['ok'])
-			throw new RuntimeException(trim($result['stderr']) ?: 'Unable to send text to tmux pane.');
+		if($text !== '')
+		{
+			$bufferName = 'tmux-pi-orchestrator-'.bin2hex(random_bytes(6));
+			$result = self::run(['load-buffer', '-b', $bufferName, '-'], 8, $text);
+			if(!$result['ok'])
+				throw new RuntimeException(trim($result['stderr']) ?: 'Unable to load text into tmux paste buffer.');
+			$result = self::run(['paste-buffer', '-d', '-b', $bufferName, '-t', $target]);
+			if(!$result['ok'])
+				throw new RuntimeException(trim($result['stderr']) ?: 'Unable to paste text into tmux pane.');
+		}
 		if($enter)
 		{
-			$result = self::run(['send-keys', '-t', $target, 'C-m']);
+			$result = self::run(['send-keys', '-t', $target, 'Enter']);
 			if(!$result['ok'])
 				throw new RuntimeException(trim($result['stderr']) ?: 'Unable to send Enter to tmux pane.');
 		}

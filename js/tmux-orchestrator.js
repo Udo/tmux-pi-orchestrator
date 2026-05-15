@@ -5,6 +5,8 @@
 
 		const apiUrl = app.dataset.apiUrl;
 		const storageKey = 'tmux-pi-orchestrator.view.v1';
+		const visibleRefreshMs = 1000;
+		const hiddenRefreshMs = 10000;
 		let csrf = app.dataset.csrf || '';
 		let selectedSession = '';
 		let selectedTarget = '';
@@ -45,6 +47,15 @@
 		function setStatus(message, error = false) {
 			els.status.textContent = message;
 			els.status.classList.toggle('error', error);
+		}
+
+		function autoRefreshDelay() {
+			return document.hidden ? hiddenRefreshMs : visibleRefreshMs;
+		}
+
+		function scheduleAutoRefresh() {
+			if (timer) clearInterval(timer);
+			timer = els.auto.checked ? setInterval(refresh, autoRefreshDelay()) : null;
 		}
 
 		function escapeHtml(text) {
@@ -272,10 +283,8 @@
 			refresh();
 		});
 		els.refresh.addEventListener('click', refresh);
-		els.auto.addEventListener('change', () => {
-			if (timer) clearInterval(timer);
-			timer = els.auto.checked ? setInterval(refresh, 2500) : null;
-		});
+		els.auto.addEventListener('change', scheduleAutoRefresh);
+		document.addEventListener('visibilitychange', scheduleAutoRefresh);
 		els.form.addEventListener('submit', async (event) => {
 			event.preventDefault();
 			if (!selectedTarget || !els.input.value) return;
@@ -312,7 +321,7 @@
 		});
 
 		refresh();
-		timer = setInterval(refresh, 2500);
+		scheduleAutoRefresh();
 	}
 
 	if (document.readyState === 'loading') {
